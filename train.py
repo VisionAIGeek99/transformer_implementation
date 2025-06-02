@@ -5,6 +5,7 @@ import hydra
 from hydra.utils import instantiate
 from omegaconf import DictConfig
 
+from utils import prepare_device
 
 @hydra.main(config_path="conf", config_name="config", version_base="1.1")
 def main(cfg: DictConfig):
@@ -18,6 +19,14 @@ def main(cfg: DictConfig):
     dataset = instantiate(cfg.dataset, path=txt_path, tokenizer=tokenizer, context_length=context_length)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=cfg.training.shuffle)
 
+
+    # prepare for (multi-device) GPU training
+    device, device_ids = prepare_device(1)
+    model = model.to(device)
+    
+    if len(device_ids) > 1:
+    model = torch.nn.DataParallel(model, device_ids=device_ids)
+    
     for x, y in dataloader:
         x_decoded = tokenizer.decode(x[0].tolist())
         y_decoded = tokenizer.decode(y[0].tolist())
