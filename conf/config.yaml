@@ -1,0 +1,44 @@
+# conf/config.yaml
+hydra:
+  job:
+    chdir: false
+
+defaults:
+  - _self_
+  - tokenizer: char_tokenizer
+  - model: rnn
+  - dataset: tiny_shakespeare
+
+project:
+  name: tinyshakespeare_rnn_lm
+  seed: 1337
+  device: cuda
+
+dataset_meta:
+    raw_path: /home/kmw2622/transformer/data/tinyshakespeare.txt
+    context_length: 10
+    split_ratio: [0.9, 0.1]
+
+vocab:
+  vocab_path: /home/kmw2622/transformer/saved/tokenizer/vocab.json
+  vocab_size: 65  # 토크나이저에서 자동 결정 가능
+
+training:
+  epochs: 20
+  batch_size: 1
+  learning_rate: 0.002
+  optimizer: adam
+  clip_grad_norm: 1.0
+  shuffle: False
+
+logging:
+  use_wandb: false
+  log_interval: 50
+  save_model: true
+  output_dir: ./checkpoints
+
+generation:
+  start_text: "ROMEO:"
+  max_new_tokens: 200
+  temperature: 1.0
+  top_k: 20

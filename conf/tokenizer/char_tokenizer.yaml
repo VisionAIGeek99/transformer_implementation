@@ -1,0 +1,2 @@
+# conf/tokenizer/char_tokenizer.yaml
+_target_: utils.tokenizer.CharTokenizer

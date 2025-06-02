@@ -1,0 +1,2 @@
+  # conf/dataset/tiny_shakespeare.yaml
+  _target_: dataset.tinyshakespeare.TinyShakespeareDataset
