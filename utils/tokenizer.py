@@ -10,7 +10,7 @@ class CharTokenizer:
     def encode(self, s: str) -> list[int]:
         return [self.stoi[c] for c in s]
     
-    def decode(self, ids: int) -> list[str]:
+    def decode(self, ids: list[int]) -> list[str]:
         return ''.join([self.itos[i] for i in ids])
 
     def save(self, path: str):
@@ -22,7 +22,19 @@ class CharTokenizer:
 
     def load(self, path: str):
         with open(path, "r") as f:
-            data = json.read(f)
+            data = json.load(f)
         self.stoi = data["stoi"]
         self.itos = {int(k): v for k, v in data["itos"].items()}
         self.vocab_size = len(self.stoi)
+
+
+def main():
+    txt_path = "/home/kmw2622/transformer/data/tinyshakespeare.txt"
+    tokenizer = CharTokenizer(open(txt_path).read())
+
+    vocab_save_path = "/home/kmw2622/transformer/saved/tokenizer/vocab.json"
+    # tokenizer.save(vocab_save_path)
+    # tokenizer.load(vocab_save_path)
+
+if __name__ == "__main__":
+    main()
