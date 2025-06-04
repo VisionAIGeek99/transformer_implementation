@@ -7,6 +7,8 @@ from omegaconf import DictConfig
 
 from utils import prepare_device
 
+from models.transformer.embedding.transformer_embedding import TransformerEmbedding
+
 @hydra.main(config_path="conf", config_name="config", version_base="1.1")
 def main(cfg: DictConfig):
     txt_path = cfg.dataset_meta.raw_path
@@ -22,16 +24,22 @@ def main(cfg: DictConfig):
 
     # prepare for (multi-device) GPU training
     device, device_ids = prepare_device(1)
-    model = model.to(device)
+    # model = model.to(device)
     
-    if len(device_ids) > 1:
-    model = torch.nn.DataParallel(model, device_ids=device_ids)
+    # if len(device_ids) > 1:
+    #     model = torch.nn.DataParallel(model, device_ids=device_ids)
     
+    vocab_size = cfg.vocab.vocab_size
+
+    pos_encoding = TransformerEmbedding(vocab_size, 50, context_length, 0.1, device)
+
     for x, y in dataloader:
-        x_decoded = tokenizer.decode(x[0].tolist())
-        y_decoded = tokenizer.decode(y[0].tolist())
-        print(f"x_decoded: {x_decoded}")
-        print(f"y_decoded: {y_decoded}")
+        encoded_data = pos_encoding(x)
+        print("aa")
+        # x_decoded = tokenizer.decode(x[0].tolist())
+        # y_decoded = tokenizer.decode(y[0].tolist())
+        # print(f"x_decoded: {x_decoded}")
+        # print(f"y_decoded: {y_decoded}")
 
         break
 

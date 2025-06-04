@@ -16,7 +16,7 @@ project:
 
 dataset_meta:
     raw_path: /home/kmw2622/transformer/data/tinyshakespeare.txt
-    context_length: 10
+    context_length: 20
     split_ratio: [0.9, 0.1]
 
 vocab:
