@@ -17,7 +17,7 @@ class TransformerEmbedding(nn.Module):
         self.device = device
 
     def forward(self, x):
-        tok_emb = self.tok_emb(x).to(self.device)
+        tok_emb = self.tok_emb(x)
         pos_emb = self.pos_emb(x)
 
         return self.drop_out(tok_emb + pos_emb)
